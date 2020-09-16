@@ -4,7 +4,7 @@ class CharacterSheet:
 		self.__surname = str()
 		self.__age = 0
 		self.__sex = str()
-		self.__sexual_orient = ''
+		self.__sexual_orient = str()
 		self.__power = str()
 		self.__appearance = str()
 		self.__personality = str()
@@ -61,7 +61,7 @@ class CharacterSheet:
 		self.__power = val
 	
 	def set_sex(self, val):
-		if len(val) > 32:
+		if len(val) < 32:
 			self.__sex = val
 		
 	def set_sexual_orientation(self, val):
@@ -77,7 +77,7 @@ class CharacterSheet:
 		self.__history = val
 	
 	def if_all_fields_filled(self):
-		for field in vars(self):
+		for field in self.__dict__:
 			if not field:
 				return False
 		return True

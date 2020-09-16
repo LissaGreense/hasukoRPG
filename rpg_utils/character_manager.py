@@ -29,6 +29,9 @@ class CharacterManager:
 	def if_user_have_character(self, user_id: int) -> bool:
 		return self._database.if_user_have_character(user_id)
 	
+	def delete_character_sheet(self, user_id: int):
+		self._database.delete_character_sheet(user_id)
+	
 	def get_character_data(self, user_id: int) -> CharacterSheet:
 		downloaded_character = CharacterSheet()
 		character_data = self._database.get_character_sheet(user_id)

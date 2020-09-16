@@ -72,19 +72,20 @@ class Character(commands.Cog):
     async def show_character(self, ctx, user: discord.Member = None):
         if user:
             if self.bot.character_manager.if_user_have_character(user.id):
-                ch_sheet = self.bot.character_manager.get_character_data(user.id)
-                
-                msg = await self.create_full_sheet_msg(ch_sheet)
-                msg_chunks = await self.split_msg_into_chunks(msg)
-                
-                for chunk in msg_chunks:
-                    await ctx.send(chunk)
-            
+                await self.get_character_and_send(ctx, user)
+
             else:
                 await ctx.send("This user doesn't have a character!")
         else:
             await ctx.send("Please, tag a user to show him/his character sheet!")
-    
+
+    async def get_character_and_send(self, ctx, user: discord.Member):
+        ch_sheet = self.bot.character_manager.get_character_data(user.id)
+        msg = await self.create_full_sheet_msg(ch_sheet)
+        msg_chunks = await self.split_msg_into_chunks(msg)
+        for chunk in msg_chunks:
+            await ctx.send(chunk)
+
     @staticmethod
     async def split_msg_into_chunks(msg):
         max_chunk_length = 2500
@@ -104,6 +105,29 @@ class Character(commands.Cog):
         msg += "History: {}\n".format(ch_sheet.get_history)
 
         return msg
+
+    @commands.command()
+    async def delete_character(self, ctx, user: discord.Member = None):
+        if user:
+            if self.bot.character_manager.if_user_have_character(user.id):
+                await self.get_character_and_send(ctx, user)
+                await self.ask_and_delete(ctx, user)
+            else:
+                await ctx.send("This user doesn't have a character")
+        else:
+            await ctx.send("Please, tag a user to delete him/his character sheet!")
+
+    async def ask_and_delete(self, ctx, user: discord.Member):
+        def check(message: discord.Message):
+            return message.channel == ctx.channel and message.author != ctx.me
+        
+        await ctx.send("Do you want to delete this character? (type: YES) ".format(user.name))
+        sure = await self.bot.wait_for('message', check=check, timeout=60.0)
+        if sure.content == "YES":
+            self.bot.character_manager.delete_character_sheet(user.id)
+            await ctx.send("{}'s character has been removed.".format(user.name))
+        else:
+            await ctx.send("{}'s character won't be removed.".format(user.name))
 
 
 def setup(bot):
