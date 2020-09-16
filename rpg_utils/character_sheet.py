@@ -6,8 +6,8 @@ class CharacterSheet:
 		self.__sex = str()
 		self.__sexual_orient = ''
 		self.__power = str()
-		self.__personality = str()
 		self.__appearance = str()
+		self.__personality = str()
 		self.__history = str()
 
 	@property
@@ -55,11 +55,7 @@ class CharacterSheet:
 			self.__surname = val
 		
 	def set_age(self, val):
-		try:
-			val = int(val)
-			self.__name = val
-		except ValueError:
-			print("Provided age is not a number!")
+		self.__age = val
 	
 	def set_power(self, val):
 		self.__power = val

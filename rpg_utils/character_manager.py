@@ -1,12 +1,13 @@
 from .character_sheet import CharacterSheet
 from constans.character_fields_constans import *
+from database.database_manager import DatabaseManager
 
 
 class CharacterManager:
-	def __init__(self, database):
+	def __init__(self, database: DatabaseManager):
 		self._database = database
 
-	def create_new_character(self, character_data) -> bool:
+	def create_new_character(self, character_data: dict, user_id: int) -> bool:
 		new_sheet = CharacterSheet()
 		
 		new_sheet.set_name(character_data[NAME])
@@ -20,6 +21,26 @@ class CharacterManager:
 		new_sheet.set_history(character_data[HISTORY])
 		
 		if new_sheet.if_all_fields_filled():
+			self._database.save_character_sheet(new_sheet, user_id)
 			return True
 		
 		return False
+	
+	def if_user_have_character(self, user_id: int) -> bool:
+		return self._database.if_user_have_character(user_id)
+	
+	def get_character_data(self, user_id: int) -> CharacterSheet:
+		downloaded_character = CharacterSheet()
+		character_data = self._database.get_character_sheet(user_id)
+		
+		downloaded_character.set_name(character_data[1])
+		downloaded_character.set_surname(character_data[2])
+		downloaded_character.set_age(character_data[3])
+		downloaded_character.set_sex(character_data[4])
+		downloaded_character.set_sexual_orientation(character_data[5])
+		downloaded_character.set_power(character_data[6])
+		downloaded_character.set_personality(character_data[7])
+		downloaded_character.set_appearance(character_data[8])
+		downloaded_character.set_history(character_data[9])
+		
+		return downloaded_character
