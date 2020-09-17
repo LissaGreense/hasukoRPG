@@ -1,5 +1,5 @@
 # hasukoRPG
-A discord bot to manage custom RPG
+A discord bot to manage custom RPG. Python 3.8
 
 # Flags
 * `-d` or `--debug` Use to turn of the debug mode
