@@ -12,7 +12,7 @@ def cursor_connection(command):
 	return function_wrapper
 
 
-class PostgressDatabase:
+class PostgresDatabase:
 	def __init__(self, db_settings):
 		self.__db_name = db_settings[NAME]
 		self.__user = db_settings[USER]
@@ -59,8 +59,10 @@ class PostgressDatabase:
 	def get_from_table_where(self, cursor, table_name: str, column_name: str, condition: str) -> tuple:
 		command = """SELECT {} FROM {} WHERE {};""".format(column_name, table_name, condition)
 		cursor.execute(command)
+		result = cursor.fetchone()
+		print(result)
 		
-		return cursor.fetchone()
+		return result
 
 	@cursor_connection
 	def get_from_table(self, cursor, table_name: str, column_name: str) -> tuple:

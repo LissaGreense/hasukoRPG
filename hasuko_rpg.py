@@ -1,7 +1,7 @@
 from runner.runner import Runner
 import argparse
 
-VERSION = '0.2.1'
+VERSION = '0.3.0'
 
 
 def main():

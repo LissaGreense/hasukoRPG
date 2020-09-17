@@ -1,4 +1,4 @@
-from .postgress import PostgressDatabase
+from .postgress import PostgresDatabase
 from constans.database_constans import *
 from rpg_utils.character_sheet import CharacterSheet
 
@@ -6,7 +6,7 @@ from rpg_utils.character_sheet import CharacterSheet
 class DatabaseManager:
     def __init__(self, args):
         self.__db_settings = self.__get_settings(args)
-        self.__service = PostgressDatabase(self.__db_settings)
+        self.__service = PostgresDatabase(self.__db_settings)
         self.__prepare_database()
     
     @staticmethod
@@ -51,5 +51,13 @@ class DatabaseManager:
     def delete_character_sheet(self, user_id: int):
         self.__service.delete_data(CHARACTERS, "{}='{}'".format(USER_ID, user_id))
     
+    def get_character_field(self, user_id: int, field: str) -> tuple:
+        field_content = self.__service.get_from_table_where(CHARACTERS, field, "{}='{}'".format(USER_ID, user_id))
+        print(field_content)
+        return field_content
+    
+    def update_character_field(self, user_id: int, field_name: str, new_content: str):
+        self.__service.update_in_table_where(CHARACTERS, field_name, new_content, "{}='{}'".format(USER_ID, user_id))
+        
     def close(self):
         self.__service.close()

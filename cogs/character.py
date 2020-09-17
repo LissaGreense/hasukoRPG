@@ -77,7 +77,7 @@ class Character(commands.Cog):
             else:
                 await ctx.send("This user doesn't have a character!")
         else:
-            await ctx.send("Please, tag a user to show him/his character sheet!")
+            await ctx.send("Please, tag a user to show his/her character sheet!")
 
     async def get_character_and_send(self, ctx, user: discord.Member):
         ch_sheet = self.bot.character_manager.get_character_data(user.id)
@@ -115,7 +115,7 @@ class Character(commands.Cog):
             else:
                 await ctx.send("This user doesn't have a character")
         else:
-            await ctx.send("Please, tag a user to delete him/his character sheet!")
+            await ctx.send("Please, tag a user to delete his/her character sheet!")
 
     async def ask_and_delete(self, ctx, user: discord.Member):
         def check(message: discord.Message):
@@ -128,6 +128,55 @@ class Character(commands.Cog):
             await ctx.send("{}'s character has been removed.".format(user.name))
         else:
             await ctx.send("{}'s character won't be removed.".format(user.name))
+    
+    @commands.command()
+    async def edit_character(self, ctx, field: str, user: discord.Member = None):
+        # TODO: do it better :/
+        if user:
+            if self.bot.character_manager.if_user_have_character(user.id):
+                fields = [NAME, SURNAME, AGE, SEX, SEX_ORIENT, POWER, PERSONALITY, APPEARANCE, HISTORY]
+                if field:
+                    if field in fields:
+                        old_content = self.bot.character_manager.get_character_field(user.id, field)
+                        new_content = await self.ask_for_a_new_content(ctx, field, old_content)
+        
+                        self.bot.character_manager.update_character_field(user.id, field, new_content)
+                    else:
+                        await ctx.send("Choose one from available fields [{}]".format(', '.join(fields)))
+                else:
+                    await ctx.send("Provide a filed:{}".format(', '.join(fields)))
+            else:
+                await ctx.send("This user doesn't have a character")
+        else:
+            await ctx.send("Please, tag a user to edit his/her character sheet!")
+    
+    async def ask_for_a_new_content(self, ctx, field: str, old_content) -> str:
+        def check(message: discord.Message):
+            return message.channel == ctx.channel and message.author != ctx.me
+    
+        await ctx.send("{}:\n{}".format(field, old_content))
+        await ctx.send("Write a new content for this filed:")
+        new_content = await self.bot.wait_for('message', check=check, timeout=60.0)
+        
+        return new_content.content
+
+    @commands.command()
+    async def character_field(self, ctx, field: str, user: discord.Member = None):
+        if not user:
+            if not self.bot.character_manager.if_user_have_character(user.id):
+                fields = [NAME, SURNAME, AGE, SEX, SEX_ORIENT, POWER, PERSONALITY, APPEARANCE, HISTORY]
+                if not field:
+                    if field not in fields:
+                        content = self.bot.character_manager.get_character_field(user.id, field)
+                        await ctx.send("{}:\n{}".format(field, content))
+                    else:
+                        await ctx.send("Choose one from available fields [{}]".format(', '.join(fields)))
+                else:
+                    await ctx.send("Provide a filed! [{}]".format(', '.join(fields)))
+            else:
+                await ctx.send("This user doesn't have a character")
+        else:
+            await ctx.send("Please, tag a user to edit her/his character sheet!")
 
 
 def setup(bot):
