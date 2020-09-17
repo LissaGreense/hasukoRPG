@@ -3,6 +3,7 @@ from constans.character_fields_constans import *
 from discord_service.bot import Bot
 from rpg_utils.character_sheet import CharacterSheet
 import discord
+import logging
 import asyncio
 
 
@@ -66,6 +67,10 @@ class Character(commands.Cog):
         await ctx.send("Provide a history:")
         history = await self.bot.wait_for('message', check=check, timeout=60.0)
         character_data[HISTORY] = history.content
+        
+        logging.info("New character sheet data saved")
+        logging.debug("Content: {}".format(character_data))
+        
         return character_data
     
     @commands.command()

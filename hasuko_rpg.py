@@ -1,7 +1,9 @@
 from runner.runner import Runner
+import logging
+import os
 import argparse
 
-VERSION = '0.3.1'
+VERSION = '0.3.2'
 
 
 def main():
@@ -13,6 +15,17 @@ def main():
 	parser.add_argument('-n', '--db-name', help="Specify the database name")
 	
 	args = parser.parse_args()
+	
+	log_path = "logs/"
+	if not os.path.exists(os.path.dirname(log_path)):
+		os.makedirs(os.path.dirname(log_path))
+		
+	if args.debug:
+		level = logging.DEBUG
+	else:
+		level = logging.INFO
+		
+	logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=level)
 	
 	runner = Runner(args)
 	runner.run()

@@ -1,4 +1,5 @@
 from discord.ext.commands import AutoShardedBot
+import logging
 
 
 class Bot(AutoShardedBot):
@@ -15,8 +16,8 @@ class Bot(AutoShardedBot):
 	
 	@staticmethod
 	async def on_ready():
-		print("Connected")
+		logging.info("Connected to the Discord")
 	
 	@staticmethod
 	async def on_disconnect():
-		print("Disconnected")
+		logging.info("Disconnected")

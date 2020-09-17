@@ -1,6 +1,7 @@
 from .postgress import PostgresDatabase
 from constans.database_constans import *
 from rpg_utils.character_sheet import CharacterSheet
+import logging
 
 
 class DatabaseManager:
@@ -22,6 +23,7 @@ class DatabaseManager:
         characters_tab = "{} NUMERIC PRIMARY KEY, {} TEXT, {} TEXT, {} TEXT, {} TEXT, {} TEXT, {} TEXT, {} TEXT, " \
                          "{} TEXT, {} TEXT".format(USER_ID, CH_NAME, CH_SURNAME, CH_AGE, CH_SEX, CH_SEXUAL_ORIENTATION,
                                                    CH_POWER, CH_APPEARANCE, CH_PERSONALITY, CH_HISTORY)
+        logging.debug(characters_tab)
         
         self.__service.create_table_if_not_exist(CHARACTERS, characters_tab)
     
@@ -35,6 +37,7 @@ class DatabaseManager:
                                                                                 ch_sheet.get_appearance,
                                                                                 ch_sheet.get_personality,
                                                                                 ch_sheet.get_history)
+        logging.debug(data)
         self.__service.insert_data(CHARACTERS, data)
     
     def if_user_have_character(self, user_id: int) -> bool:
@@ -53,6 +56,8 @@ class DatabaseManager:
     
     def get_character_field(self, user_id: int, field: str) -> tuple:
         field_content = self.__service.get_from_table_where(CHARACTERS, field, "{}='{}'".format(USER_ID, user_id))
+        logging.debug(field_content)
+        
         return field_content
     
     def update_character_field(self, user_id: int, field_name: str, new_content: str):
