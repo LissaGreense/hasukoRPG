@@ -162,11 +162,11 @@ class Character(commands.Cog):
 
     @commands.command()
     async def character_field(self, ctx, field: str, user: discord.Member = None):
-        if not user:
-            if not self.bot.character_manager.if_user_have_character(user.id):
+        if user:
+            if self.bot.character_manager.if_user_have_character(user.id):
                 fields = [NAME, SURNAME, AGE, SEX, SEX_ORIENT, POWER, PERSONALITY, APPEARANCE, HISTORY]
-                if not field:
-                    if field not in fields:
+                if field:
+                    if field in fields:
                         content = self.bot.character_manager.get_character_field(user.id, field)
                         await ctx.send("{}:\n{}".format(field, content))
                     else:

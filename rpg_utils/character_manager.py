@@ -50,7 +50,6 @@ class CharacterManager:
 	
 	def get_character_field(self, user_id: int, field_name: str) -> str:
 		field_content = self._database.get_character_field(user_id, field_name)[0]
-		print(field_content)
 		return field_content
 		
 	def update_character_field(self, user_id: int, field_name: str, new_content: str):

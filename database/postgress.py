@@ -60,7 +60,6 @@ class PostgresDatabase:
 		command = """SELECT {} FROM {} WHERE {};""".format(column_name, table_name, condition)
 		cursor.execute(command)
 		result = cursor.fetchone()
-		print(result)
 		
 		return result
 
