@@ -21,8 +21,9 @@ class DatabaseManager:
     
     def __prepare_database(self):
         characters_tab = "{} NUMERIC PRIMARY KEY, {} TEXT, {} TEXT, {} TEXT, {} TEXT, {} TEXT, {} TEXT, {} TEXT, " \
-                         "{} TEXT, {} TEXT".format(USER_ID, CH_NAME, CH_SURNAME, CH_AGE, CH_SEX, CH_SEXUAL_ORIENTATION,
-                                                   CH_POWER, CH_APPEARANCE, CH_PERSONALITY, CH_HISTORY)
+                         "{} TEXT, {} TEXT, {} TEXT".format(USER_ID, CH_NAME, CH_SURNAME, CH_AGE, CH_SEX,
+                                                            CH_SEXUAL_ORIENTATION, CH_POWER, CH_APPEARANCE,
+                                                            CH_PERSONALITY, CH_HISTORY, CH_GOLD)
         logging.debug(characters_tab)
         
         self.__service.create_table_if_not_exist(CHARACTERS, characters_tab)
@@ -30,13 +31,16 @@ class DatabaseManager:
     def save_character_sheet(self, ch_sheet: CharacterSheet, user_id: int):
         data = "'{}'".format(user_id)
         
-        data += ", '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'".format(ch_sheet.get_name, ch_sheet.get_surname,
-                                                                                ch_sheet.get_age, ch_sheet.get_sex,
-                                                                                ch_sheet.get_sexual_orientation,
-                                                                                ch_sheet.get_power,
-                                                                                ch_sheet.get_appearance,
-                                                                                ch_sheet.get_personality,
-                                                                                ch_sheet.get_history)
+        data += ", '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'".format(ch_sheet.get_name,
+                                                                                      ch_sheet.get_surname,
+                                                                                      ch_sheet.get_age,
+                                                                                      ch_sheet.get_sex,
+                                                                                      ch_sheet.get_sexual_orientation,
+                                                                                      ch_sheet.get_power,
+                                                                                      ch_sheet.get_appearance,
+                                                                                      ch_sheet.get_personality,
+                                                                                      ch_sheet.get_history,
+                                                                                      ch_sheet.get_gold)
         logging.debug(data)
         self.__service.insert_data(CHARACTERS, data)
     
@@ -62,6 +66,6 @@ class DatabaseManager:
     
     def update_character_field(self, user_id: int, field_name: str, new_content: str):
         self.__service.update_in_table_where(CHARACTERS, field_name, new_content, "{}='{}'".format(USER_ID, user_id))
-        
+    
     def close(self):
         self.__service.close()

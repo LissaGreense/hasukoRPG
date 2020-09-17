@@ -19,6 +19,7 @@ class CharacterManager:
 		new_sheet.set_personality(character_data[PERSONALITY])
 		new_sheet.set_appearance(character_data[APPEARANCE])
 		new_sheet.set_history(character_data[HISTORY])
+		new_sheet.set_default_money()
 		
 		if new_sheet.if_all_fields_filled():
 			self._database.save_character_sheet(new_sheet, user_id)
@@ -45,6 +46,7 @@ class CharacterManager:
 		downloaded_character.set_personality(character_data[7])
 		downloaded_character.set_appearance(character_data[8])
 		downloaded_character.set_history(character_data[9])
+		downloaded_character.set_money(int(character_data[10]))
 		
 		return downloaded_character
 	

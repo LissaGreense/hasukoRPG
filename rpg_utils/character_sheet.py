@@ -9,6 +9,7 @@ class CharacterSheet:
 		self.__appearance = str()
 		self.__personality = str()
 		self.__history = str()
+		self.__gold = int
 
 	@property
 	def get_name(self):
@@ -46,6 +47,10 @@ class CharacterSheet:
 	def get_history(self):
 		return self.__history
 	
+	@property
+	def get_gold(self):
+		return self.__gold
+	
 	def set_name(self, val):
 		if len(val) < 64:
 			self.__name = val
@@ -75,6 +80,12 @@ class CharacterSheet:
 		
 	def set_history(self, val):
 		self.__history = val
+	
+	def set_money(self, val):
+		self.__gold = val
+	
+	def set_default_money(self):
+		self.__gold = 100
 	
 	def if_all_fields_filled(self):
 		for field in self.__dict__:
